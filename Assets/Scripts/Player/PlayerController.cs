@@ -9,6 +9,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float rotationSpeed = 10f;
     [SerializeField] private float gravity = -9.81f;
 
+    [Header("Crew Interaction")]
+    [SerializeField] private CrewResources crewResources;
+    [SerializeField] private float moraleBoostAmount = 10f;
+    [SerializeField] private float waterCost = 5f;
+    [SerializeField] private float foodCost = 5f;
+
     private CharacterController _controller;
     private Vector2 _moveInput;
     private float _verticalVelocity;
@@ -56,14 +62,25 @@ public class PlayerController : MonoBehaviour
     public void OnInteract(InputAction.CallbackContext context)
     {
         if (context.performed)
+        {
             ConsoleOverlay.Log("Interact acionado!");
+        }
     }
 
     public void OnAction1(InputAction.CallbackContext context)
     {
-        if (context.performed)
-            ConsoleOverlay.Log("Action1 acionado!");
+        if (!context.performed) return;
+
+        if (crewResources != null)
+        {
+            crewResources.ApplyMoraleBoost(moraleBoostAmount, waterCost, foodCost);
+        }
+        else
+        {
+            ConsoleOverlay.Log("Action1: crewResources NÃO está ligado no Inspector!");
+        }
     }
 }
+
 
 
